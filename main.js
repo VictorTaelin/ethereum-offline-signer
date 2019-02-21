@@ -61,4 +61,4 @@ const tx = new Transaction({
 tx.sign(Buffer.from(fromKey,"hex"));
 const serializedTx = tx.serialize();
 console.log("Signed. Result (serialized):");
-console.log(serializedTx.toString("hex"));
+console.log("0x"+serializedTx.toString("hex"));
