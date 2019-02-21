@@ -1,0 +1,29 @@
+{
+  "name": "ethereum-offline-signer",
+  "version": "0.1.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "eth-sign": "main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maiavictor/ethereum-offline-signer.git"
+  },
+  "author": "Victor Maia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maiavictor/ethereum-offline-signer/issues"
+  },
+  "homepage": "https://github.com/maiavictor/ethereum-offline-signer#readme",
+  "dependencies": {
+    "bn.js": "^4.11.8",
+    "ethereumjs-tx": "^1.3.7",
+    "ethereumjs-units": "^0.2.0",
+    "ethereumjs-wallet": "^0.6.3",
+    "js-sha3": "^0.8.0"
+  }
+}
