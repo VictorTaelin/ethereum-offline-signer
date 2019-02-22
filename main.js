@@ -9,7 +9,7 @@ const even        = hex => hex.length % 2 === 1 ? "0" + hex : hex;
 const dec         = dec => "0x" + even(new BN(dec, 10).toString("hex"));
 const gwei        = gwei => dec(units.convert(gwei, "gwei", "wei"));
 const eth         = eth => dec(units.convert(eth, "eth", "wei"));
-const key         = key => key.slice(0,2) === "0x" ? key.slice(2) : sha3.keccak256(key);
+const key         = key => key.slice(0,2) === "0x" ? key : "0x" + sha3.keccak256(key);
 
 // Displays usage info
 if (!process.argv[2] || !process.argv[3] || !process.argv[4]) {
@@ -31,7 +31,7 @@ if (!process.argv[2] || !process.argv[3] || !process.argv[4]) {
 const nonce    = process.argv[2] || 0;
 const value    = process.argv[3] || 0.001;
 const fromKey  = key(process.argv[4] || "test");
-const fromAddr = "0x" + wallet.fromPrivateKey(Buffer.from(fromKey,"hex")).getAddress().toString("hex");
+const fromAddr = "0x" + wallet.fromPrivateKey(Buffer.from(fromKey.slice(2),"hex")).getAddress().toString("hex");
 const to       = process.argv[5] || fromAddr;
 const gasPrice = process.argv[6] || 10;
 const gasLimit = process.argv[7] || 50000;
@@ -42,7 +42,8 @@ const chainId  = process.argv[9] || 1;
 console.log("Signing transaction.");
 console.log("nonce    : " + nonce);
 console.log("value    : " + value + " eth");
-console.log("from     : " + fromAddr);
+console.log("fromKey  : " + fromKey);
+console.log("fromAddr : " + fromAddr);
 console.log("to       : " + to);
 console.log("gasPrice : " + gasPrice + " gwei (" + units.convert(gasPrice, "gwei", "eth") + " eth)");
 console.log("gasLimit : " + gasLimit + " gas (max " + units.convert(gasPrice * gasLimit, "gwei", "eth") + " eth)");
@@ -58,7 +59,7 @@ const tx = new Transaction({
   gasLimit : dec(gasLimit),
   data     : data,
   chainId  : chainId});
-tx.sign(Buffer.from(fromKey,"hex"));
+tx.sign(Buffer.from(fromKey.slice(2),"hex"));
 const serializedTx = tx.serialize();
 console.log("Signed. Result (serialized):");
 console.log("0x"+serializedTx.toString("hex"));
