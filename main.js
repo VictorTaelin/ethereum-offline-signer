@@ -4,6 +4,7 @@ const sha3        = require("js-sha3");
 const wallet      = require("ethereumjs-wallet");
 const Transaction = require("ethereumjs-tx");
 const units       = require("ethereumjs-units");
+const util        = require("ethereumjs-util");
 const BN          = require("bn.js");
 const even        = hex => hex.length % 2 === 1 ? "0" + hex : hex;
 const dec         = dec => "0x" + even(new BN(dec, 10).toString("hex"));
@@ -32,18 +33,26 @@ const nonce    = process.argv[2] || 0;
 const value    = process.argv[3] || 0.001;
 const fromKey  = key(process.argv[4] || "test");
 const fromAddr = "0x" + wallet.fromPrivateKey(Buffer.from(fromKey.slice(2),"hex")).getAddress().toString("hex");
-const to       = process.argv[5] || fromAddr;
+const to       = process.argv[5] || util.toChecksumAddress(fromAddr);
 const gasPrice = process.argv[6] || 10;
 const gasLimit = process.argv[7] || 50000;
 const data     = process.argv[8] || "0x";
 const chainId  = process.argv[9] || 1;
+
+// Validate TO_ADDRESS checksum
+if (to !== util.toChecksumAddress(to)) {
+  console.log("TO_ADDRESS checksum mismatch.");
+  console.log("- Expect: " + util.toChecksumAddress(to));
+  console.log("- Actual: " + to);
+  process.exit();
+}
 
 // Display transaction params
 console.log("Signing transaction.");
 console.log("nonce    : " + nonce);
 console.log("value    : " + value + " eth");
 console.log("fromKey  : " + fromKey);
-console.log("fromAddr : " + fromAddr);
+console.log("fromAddr : " + util.toChecksumAddress(fromAddr));
 console.log("to       : " + to);
 console.log("gasPrice : " + gasPrice + " gwei (" + units.convert(gasPrice, "gwei", "eth") + " eth)");
 console.log("gasLimit : " + gasLimit + " gas (max " + units.convert(gasPrice * gasLimit, "gwei", "eth") + " eth)");
