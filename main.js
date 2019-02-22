@@ -4,7 +4,7 @@ const sha3        = require("js-sha3");
 const wallet      = require("ethereumjs-wallet");
 const Transaction = require("ethereumjs-tx");
 const units       = require("ethereumjs-units");
-const BN          = require("BN.js");
+const BN          = require("bn.js");
 const even        = hex => hex.length % 2 === 1 ? "0" + hex : hex;
 const dec         = dec => "0x" + even(new BN(dec, 10).toString("hex"));
 const gwei        = gwei => dec(units.convert(gwei, "gwei", "wei"));
